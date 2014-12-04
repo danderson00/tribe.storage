@@ -1,14 +1,15 @@
 {
   "name": "tribe.storage",
-  "version": "0.0.4",
-  "description": "Efficient, portable, extensible object storage for the tribe platform.",
+  "version": "0.0.7",
+  "description": "Efficient, portable, extensible object storage.",
   "main": "index.js",
   "dependencies": {
     "sqlite3": "^3.0.0",
     "q": "~1.0.1",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+	"tribe.expressions": "^0.0.2"
   },
-  "homepage": "http://github.com/danderson00/tribe",
+  "homepage": "http://github.com/danderson00/tribe.storage",
   "author": {
     "name": "Dale Anderson",
     "email": "tribejs@gmail.com",
@@ -34,7 +35,7 @@
     }
   ],
   "bugs": {
-    "url": "http://github.com/danderson00/tribe/issues"
+    "url": "http://github.com/danderson00/tribe.storage/issues"
   },
   "license": {
     "type": "MIT",
@@ -42,7 +43,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/danderson00/tribe.git"
+    "url": "git://github.com/danderson00/tribe.storage.git"
   },
   "readmeFilename": "README.md"
 }

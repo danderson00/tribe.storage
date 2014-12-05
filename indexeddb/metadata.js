@@ -29,6 +29,6 @@ function initialise() {
             database.createObjectStore('stores', { keyPath: 'name' });
         }).then(function (database) {
             db = database;
-            store = db.store('stores');
+            store = db.store({ name: 'stores' });
         });
 }

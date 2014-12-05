@@ -10,11 +10,10 @@ suite('tribe.storage.integration.' + options.type, function () {
                 { p1: 1, p2: 'test' },
                 { p1: 2, p2: 'test2' }
             ])
-            .then(function (entity) {
-                return entity.retrieve({ p: 'p1', v: 1 });
+            .then(function (container) {
+                return container.retrieve({ p: 'p1', v: 1 });
             })
             .then(function (rows) {
-                db.close();
                 expect(rows.length).to.equal(1);
                 delete rows[0].id;
                 expect(rows[0]).to.deep.equal({ p1: 1, p2: 'test' });
@@ -30,11 +29,10 @@ suite('tribe.storage.integration.' + options.type, function () {
                 { p1: 'test', p2: 3 },
                 { p1: 'test2', p2: 2 },
             ])
-            .then(function (entity) {
-                return entity.retrieve([{ p: 'p1', v: 'test' }, { p: 'p2', o: '>=', v: 2 }]);
+            .then(function (container) {
+                return container.retrieve([{ p: 'p1', v: 'test' }, { p: 'p2', o: '>=', v: 2 }]);
             })
             .then(function (rows) {
-                db.close();
                 expect(rows.length).to.equal(2);
                 console.log('multiple key index store and retrieve complete');
             });
@@ -47,20 +45,29 @@ suite('tribe.storage.integration.' + options.type, function () {
                 { p1: { p2: 'test' }, p3: 1 },
                 { p1: { p2: 'test2' }, p3: 1 }
             ])
-            .then(function (entity) {
-                return entity.retrieve([{ p: 'p1.p2', v: 'test' }, { p: 'p3', v: 1 }]);
+            .then(function (container) {
+                return container.retrieve([{ p: 'p1.p2', v: 'test' }, { p: 'p3', v: 1 }]);
             })
             .then(function (rows) {
-                db.close();
                 expect(rows.length).to.equal(2);
                 console.log('complex object store and retrieve complete');
             });
     });
 
-    function open(indexes, entities) {
+    test("add operation returns entity with autoIncrement keyPath property set", function () {
+        return open([], [], 'id')
+            .then(function (container) {
+                return container.store({});
+            })
+            .then(function (updatedEntity) {
+                expect(updatedEntity).to.deep.equal({ id: 1 });
+            });
+    });
+
+    function open(indexes, entities, keyPath) {
         var entity;
 
-        return storage.open([{ name: 'test', indexes: indexes }], options)
+        return storage.open([{ name: 'test', indexes: indexes, keyPath: keyPath, autoIncrement: true }], options)
             .then(function (provider) {
                 db = provider;
                 entity = provider.entity('test');
@@ -70,4 +77,8 @@ suite('tribe.storage.integration.' + options.type, function () {
                 return entity;
             });
     }
+
+    teardown(function () {
+        db.close();
+    });
 });

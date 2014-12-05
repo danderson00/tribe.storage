@@ -30,7 +30,7 @@ var api = module.exports = {
         }
     },
     entityContainer: function (entity) {
-        return entityContainer(db.store(entity.name));
+        return entityContainer(db.store(entity), entity);
     },
     close: function () {
         db && db.close();

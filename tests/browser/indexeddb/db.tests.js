@@ -6,6 +6,22 @@
         db.close();
     });
 
+    test("adding single object returns key value", function () {
+        return open().then(function () {
+            return store.add({ id: 1, value: 'one' });
+        }).then(function (key) {
+            expect(key).to.equal(1);
+        });
+    });
+
+    test("adding array of objects returns array of key values", function () {
+        return open().then(function () {
+            return store.add([{ id: 1, value: 'one' }, { id: 2, value: 'two' }]);
+        }).then(function (keys) {
+            expect(keys).to.deep.equal([1, 2]);
+        });
+    });
+
     test("single object added passing single object", function () {
         return open().then(add).then(function () {
             return store.single(1);
@@ -71,7 +87,7 @@
             store.createIndex('idIndex', 'id');
         }).then(function (stores) {
             db = stores;
-            store = stores.store('test');
+            store = stores.store({ name: 'test' });
             return store.clear();
         });
     }

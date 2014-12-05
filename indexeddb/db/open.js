@@ -4,8 +4,8 @@ var Q = require('q'),
 module.exports = function (name, version, upgrade) {
     return module.exports.db(name, version, upgrade).then(function (database) {
         return {
-            store: function (name) {
-                return store(database, name);
+            store: function (entity) {
+                return store(database, entity);
             },
             close: function () {
                 database.close();

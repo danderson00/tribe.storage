@@ -8,6 +8,7 @@ module.exports = {
 
         return {
             sql: "insert into " + entityName + " " + columnList() + " values " + paramList(columns.length + 2),
+                //+ ";select seq from sqlite_sequence where name='" + entityName + "'",
             parameters: paramArray()
         };
 

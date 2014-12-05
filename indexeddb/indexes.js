@@ -1,19 +1,21 @@
 ﻿module.exports = {
     indexName: function (expression) {
         if (expression.constructor === Array) {
-            var paths = [];
-            for (var i = 0, l = expression.length; i < l; i++)
-                paths.push(expression[i].p);
+            var sorted = sortByName(expression),
+                paths = [];
+            for (var i = 0, l = sorted.length; i < l; i++)
+                paths.push(sorted[i].p);
             return paths.join('_');
         }
         return expression.p;
     },
     convertExpression: function (expression) {
         if (expression.constructor === Array) {
-            var upperBounds = [],
+            var sorted = sortByName(expression),
+                upperBounds = [],
                 lowerBounds = [];
-            for (var i = 0, l = expression.length; i < l; i++) {
-                var bounds = convertExpression(expression[i]);
+            for (var i = 0, l = sorted.length; i < l; i++) {
+                var bounds = convertExpression(sorted[i]);
                 lowerBounds.push(bounds.lower);
                 upperBounds.push(bounds.upper);
             }
@@ -75,4 +77,10 @@ function getConversion(value) {
     };
 
     return conversions[typeof value] || conversions.default;
+}
+
+function sortByName(source) {
+    return source.sort(function (a, b) {
+        return a.p > b.p;
+    });
 }

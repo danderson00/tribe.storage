@@ -29,8 +29,9 @@ function operation(name) {
         db[name](query, parameters, function (err, result) {
             if (err)
                 deferred.reject(err);
-            else
-                deferred.resolve(result);
+            else {
+                deferred.resolve(result || this.lastID);
+            }
         });
 
         return deferred.promise;

@@ -46,4 +46,11 @@
                 return database.get("select * from messages where testId = 1 and test2Id = 1");
             });
     });
+
+    test("initialise with keyPath creates __key column", function () {
+        return initialise({ name: 'messages', indexes: [], keyPath: 'id' }, database)
+            .then(function () {
+                return database.get("select * from messages");// where id = 1");
+            });
+    });
 });

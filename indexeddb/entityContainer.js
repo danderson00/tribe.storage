@@ -5,8 +5,13 @@ module.exports = function (store, definition) {
     return {
         store: function (entity) {
             return store.add(entity).then(function (result) {
-                if (definition.keyPath)
-                    keyPath.set(definition.keyPath, entity, result);
+                if (definition.keyPath) {
+                    if (result.constructor === Array)
+                        for (var i = 0, l = result.length; i < l; i++)
+                            keyPath.set(definition.keyPath, entity[i], result[i]);
+                    else
+                        keyPath.set(definition.keyPath, entity, result);
+                }
                 return entity;
             });
         },

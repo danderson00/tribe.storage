@@ -2,8 +2,7 @@
     _ = require('underscore');
 
 module.exports = function (entity, database) {
-    var entityName = entity.name,
-        indexes = entity.indexes,
+    var indexes = entity.indexes,
         existingColumns, existingIndexes;
 
     return loadTableData()
@@ -11,10 +10,10 @@ module.exports = function (entity, database) {
         .then(createIndexes);
 
     function loadTableData(name) {
-        return database.all("pragma table_info(" + entityName + ")")
+        return database.all("pragma table_info(" + entity.name + ")")
             .then(function (rows) {
                 existingColumns = _.pluck(rows, 'name');
-                return database.all("pragma index_list(" + entityName + ")")
+                return database.all("pragma index_list(" + entity.name + ")")
             })
             .then(function (rows) {
                 existingIndexes = _.pluck(rows, 'name');
@@ -23,7 +22,7 @@ module.exports = function (entity, database) {
 
     function createTable() {
         if (existingColumns.length === 0)
-            return database.run("create table " + entityName + " (__content text)");
+            return database.run("create table " + entity.name + " (__key integer primary key autoincrement, __content text)");
     }
 
     function createIndexes() {
@@ -40,11 +39,11 @@ module.exports = function (entity, database) {
 
             function createIndexColumn(path) {
                 if(!columnExists(path))
-                return database.run("alter table " + entityName + " add column " + indexName(path) + " text");
+                return database.run("alter table " + entity.name + " add column " + indexName(path) + " text");
             }
 
             function createIndex() {
-                return database.run("create index " + indexName(index) + " on " + entityName + " (" + indexColumns(index) + ")");
+                return database.run("create index " + indexName(index) + " on " + entity.name + " (" + indexColumns(index) + ")");
             }
 
             function indexColumns() {

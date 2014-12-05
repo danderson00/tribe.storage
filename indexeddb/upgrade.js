@@ -30,6 +30,6 @@
 
 function indexName(index) {
     if (index.constructor === Array)
-        return index.join('_');
+        return index.sort().join('_');
     return index;
 }

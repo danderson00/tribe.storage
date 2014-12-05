@@ -22,7 +22,7 @@
         });
     });
 
-    test("single object added passing single object", function () {
+    test("retrive single object added passing single object", function () {
         return open().then(add).then(function () {
             return store.single(1);
         }).then(function (result) {
@@ -30,7 +30,7 @@
         });
     });
 
-    test("single object added passing array of objects", function () {
+    test("retrive single object added passing array of objects", function () {
         return open().then(add).then(function () {
             return store.single(2);
         }).then(function (result) {
@@ -38,7 +38,7 @@
         });
     });
 
-    test("single object put passing single object", function () {
+    test("retrive single object put passing single object", function () {
         return open().then(put).then(function () {
             return store.single(1);
         }).then(function (result) {
@@ -46,7 +46,7 @@
         });
     });
 
-    test("single object put passing array of objects", function () {
+    test("retrive single object put passing array of objects", function () {
         return open().then(put).then(function () {
             return store.single(2);
         }).then(function (result) {
@@ -54,7 +54,7 @@
         });
     });
 
-    test("single non-existent object returns undefined", function () {
+    test("retrive single non-existent object returns undefined", function () {
         return open().then(add).then(function () {
             return store.single(4);
         }).then(function (result) {

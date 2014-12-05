@@ -6,24 +6,35 @@
 
             if(entity.indexes)
                 for (var j = 0, l2 = entity.indexes.length; j < l2; j++)
-                    createIndex(store, entity.indexes[j]);
+                    createIndex(store, entity, entity.indexes[j]);
         }
 
         function retriveStore(entity) {
-            if (!database.objectStoreNames.contains(entity.name))
-                return database.createObjectStore(entity.name, {
+            if (!database.objectStoreNames.contains(entity.name)) {
+                var store = database.createObjectStore(entity.name, {
                     autoIncrement: entity.autoIncrement || !entity.keyPath,
                     keyPath: entity.keyPath
                 });
 
+                // create an index against our keyPath so it can be queried consistently
+                if (entity.keyPath)
+                    store.createIndex(entity.keyPath, entity.keyPath);
+                return store;
+            }
+
             return transaction.objectStore(entity.name);
         }
 
-        function createIndex(store, index) {
+        function createIndex(store, entity, index) {
             var name = indexName(index);
 
-            if (!store.indexNames.contains(name))
+            if (!store.indexNames.contains(name)) {
                 store.createIndex(name, index, { unique: false });
+                if(entity.keyPath) {
+                    var indexWithKeyPath = Array.prototype.concat.call([entity.keyPath], index);
+                    store.createIndex(indexName(indexWithKeyPath), indexWithKeyPath, { unique: false });
+                }
+            }
         }
     };
 }

@@ -21,8 +21,11 @@ module.exports = function (entity, database) {
     }
 
     function createTable() {
-        if (existingColumns.length === 0)
-            return database.run("create table " + entity.name + " (__key integer primary key autoincrement, __content text)");
+        if (existingColumns.length === 0) {
+            var keyColumn = indexName(entity.keyPath) || "__key",
+                autoIncrement = (entity.autoIncrement || !entity.keyPath) ? "autoincrement" : "";
+            return database.run("create table " + entity.name + " (" + keyColumn + " integer primary key " + autoIncrement + ", __content text)");
+        }
     }
 
     function createIndexes() {
@@ -63,6 +66,7 @@ module.exports = function (entity, database) {
     }
 
     function indexName(index) {
+        if (!index) return '';
         if (index.constructor === Array)
             return _.map(index, indexName).join('__');
         return index.replace(/\./g, '_');

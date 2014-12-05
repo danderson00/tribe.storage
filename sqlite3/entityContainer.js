@@ -12,7 +12,7 @@ module.exports = function (entityData, database) {
 
             function storeEntity(entity) {
                 return database
-                    .run(queries.store(entityData.name, entityData.indexes, entity))
+                    .run(queries.store(entityData, entity))
                     .then(function (result) {
                         if (entityData.keyPath)
                             keyPath.set(entityData.keyPath, entity, result);
@@ -23,7 +23,10 @@ module.exports = function (entityData, database) {
         retrieve: function (predicates) {
             return database.all(queries.retrieve(entityData.name, predicates)).then(function (rows) {
                 return _.map(rows, function (row) {
-                    return JSON.parse(row.__content);
+                    var result = JSON.parse(row.__content);
+                    if (entityData.keyPath)
+                        keyPath.set(entityData.keyPath, result, row[entityData.keyPath.replace(/\./g, '_')]);
+                    return result;
                 });
             });
         }

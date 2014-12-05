@@ -3,16 +3,23 @@
 
     test("store simple envelope with no indexes", function () {
         var envelope = { id: 1, topic: 'test' },
-            query = queries.store('messages', [], envelope);
+            query = queries.store({ name: 'messages', indexes: [] }, envelope);
         expect(query.sql).to.equal("insert into messages (__content) values (?)");
         expect(query.parameters).to.deep.equal([JSON.stringify(envelope)]);
     });
 
     test("store envelope with indexes", function () {
         var envelope = { id: 1, topic: 'test', value1: 1, value2: 2 },
-            query = queries.store('messages', ['value1', 'value2'], envelope);
+            query = queries.store({ name: 'messages', indexes: ['value1', 'value2'] }, envelope);
         expect(query.sql).to.equal("insert into messages (__content,value1,value2) values (?,?,?)");
         expect(query.parameters).to.deep.equal([JSON.stringify(envelope), 1, 2]);
+    });
+
+    test("store includes keyPath when autoIncrement is not set", function () {
+        var envelope = { id: 1, topic: 'test' },
+            query = queries.store({ name: 'messages', indexes: [], keyPath: 'id' }, envelope);
+        expect(query.sql).to.equal("insert into messages (__content,id) values (?,?)");
+        expect(query.parameters).to.deep.equal([JSON.stringify(envelope), 1]);
     });
 
     test("retrieve with index", function () {

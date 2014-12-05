@@ -3,12 +3,16 @@
     _ = require('underscore');
 
 module.exports = {
-    store: function (entityName, indexes, entity) {
-        var columns = _.flatten(indexes);
+    store: function (entityData, entity) {
+        var columns = _.flatten(entityData.indexes);
+
+        // if we've specified a keyPath and it's not an autoIncrement column, 
+        // we need to explicitly populate the column value so it can be queried
+        if (entityData.keyPath && !entityData.autoIncrement)
+            columns.push(entityData.keyPath);
 
         return {
-            sql: "insert into " + entityName + " " + columnList() + " values " + paramList(columns.length + 2),
-                //+ ";select seq from sqlite_sequence where name='" + entityName + "'",
+            sql: "insert into " + entityData.name + " " + columnList() + " values " + paramList(columns.length + 2),
             parameters: paramArray()
         };
 

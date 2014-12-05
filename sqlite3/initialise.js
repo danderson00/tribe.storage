@@ -29,7 +29,7 @@ module.exports = function (entity, database) {
     }
 
     function createIndexes() {
-        return Q.all(_.map(indexes, function (index) {
+        return Q.all(_.map(indexes, function (index) { 
             if (!indexExists(index)) {
                 return Q.all(createIndexColumns()).then(createIndex);
             }
@@ -41,8 +41,10 @@ module.exports = function (entity, database) {
             }
 
             function createIndexColumn(path) {
-                if(!columnExists(path))
-                return database.run("alter table " + entity.name + " add column " + indexName(path) + " text");
+                if (!columnExists(path)) {
+                    existingColumns.push(indexName(path));
+                    return database.run("alter table " + entity.name + " add column " + indexName(path) + " text");
+                }
             }
 
             function createIndex() {

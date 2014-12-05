@@ -1,4 +1,6 @@
 ﻿module.exports = function (options, suite, test, expect, teardown) {
+    require('./integration.expressions')(options, suite, test, expect, teardown);
+
     suite('tribe.storage.integration.' + options.type, function () {
         var storage = require('tribe.storage'),
             db;

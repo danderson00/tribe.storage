@@ -37,6 +37,13 @@
             });
     });
 
+    test("columns can be specified multiple times in initialise", function () {
+        return initialise({ name: 'messages', indexes: ['testId', ['testId', 'test2Id']] }, database)
+            .then(function () {
+                return database.get("select * from messages where testId = 1");
+            });
+    });
+
     test("initialise with new indexes creates new columns", function () {
         return initialise({ name: 'messages', indexes: ['testId'] }, database)
             .then(function () {

@@ -1,8 +1,10 @@
 ﻿var Q = require('q'),
     _ = require('underscore');
 
-module.exports = function (entityName, indexes, database) {
-    var existingColumns, existingIndexes;
+module.exports = function (entity, database) {
+    var entityName = entity.name,
+        indexes = entity.indexes,
+        existingColumns, existingIndexes;
 
     return loadTableData()
         .then(createTable)

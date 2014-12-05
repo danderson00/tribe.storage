@@ -29,8 +29,8 @@ var api = module.exports = {
                 return reset();
         }
     },
-    entityContainer: function (name) {
-        return entityContainer(db.store(name));
+    entityContainer: function (entity) {
+        return entityContainer(db.store(entity.name));
     },
     close: function () {
         db && db.close();

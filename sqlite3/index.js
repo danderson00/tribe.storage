@@ -13,10 +13,10 @@ var api = module.exports = {
         options = options || {};
         database.open(options.filename);
         return Q.all(_.map(entities, function (entity) {
-            return initialise(entity.name, entity.indexes, database);
+            return initialise(entity, database);
         }));
     },
-    entityContainer: function (name, indexes) {
-        return entityContainer(name, indexes, database);
+    entityContainer: function (entity) {
+        return entityContainer(entity, database);
     }
 };

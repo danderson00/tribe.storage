@@ -2,7 +2,7 @@
     _ = require('underscore'),
     Q = require('q');
 
-module.exports = function (name, indexes, database) {
+module.exports = function (entityData, database) {
     return {
         store: function (entities) {
             if (entities.constructor === Array)
@@ -10,11 +10,11 @@ module.exports = function (name, indexes, database) {
             return storeEntity(entities);
 
             function storeEntity(entity) {
-                return database.run(queries.store(name, indexes, entity));
+                return database.run(queries.store(entityData.name, entityData.indexes, entity));
             }
         },
         retrieve: function (predicates) {
-            return database.all(queries.retrieve(name, predicates)).then(function (rows) {
+            return database.all(queries.retrieve(entityData.name, predicates)).then(function (rows) {
                 return _.map(rows, function (row) {
                     return JSON.parse(row.__content);
                 });

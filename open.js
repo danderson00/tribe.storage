@@ -7,7 +7,7 @@
         return {
             entity: function (name) {
                 // this must be a lightweight operation, and the entityContainer must remain stateless, i.e. functions are deterministic across instances
-                return store.entityContainer(name, hash[name].indexes);
+                return store.entityContainer(hash[name]);
             },
             close: function () {
                 if (store.close) store.close();

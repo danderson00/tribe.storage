@@ -43,6 +43,82 @@ Usage
 
 To see this in the browser, simply execute browserify against this sample and execute.
 
+API
+---
+
+	var storage = require('tribe.storage');
+
+### open
+
+	storage.open(entities, options);
+
+The open function initialises the storage provider. This must be done before any storage operations can be performed.
+
+	entities = [{
+		name: 'entity name',
+		keyPath: 'path.to.key.property',
+		autoIncrement: true,
+		indexes: [
+			'single.property.index',
+			['multiple.property.index', 'another.property']
+		]
+	}, {...}, ...];
+
+	options = {
+		type: 'sqlite3',
+		filename: 'file.sqlite'
+	};
+
+	options = {
+		type: 'indexeddb',
+		reset: true
+	};
+
+The open method returns a promise. The result of the promise will be a provider object 
+
+	storage.open().then(function (provider) {
+		
+	});
+
+### provider
+
+	var entityContainer = provider.entity(name);
+
+The entity function directly returns an entityContainer object for the specified entity. The entity must be registered when calling open.
+
+	provider.close();
+
+The close function closes any active database connections associated with the provider.
+
+### entityContainer
+
+	var container = provider.entity(name);
+
+	container.store({});
+	container.store([{}, {}, ...]);
+
+The store method accepts a single object or array of objects and persists these objects to the object store.
+
+If both a keyPath and autoIncrement have been specified, the stored object has the keyPath property set to the latest autoIncrement value.
+
+The store function returns a promise, the result of which is the updated object.
+
+	container.retrieve(expression);
+
+The retrieve function returns a promise, the result of which is an array of objects that match the specified expression (see below).
+
+Expressions
+-----------
+
+Expressions are simple objects containing a target property, an operation and a value.
+
+	var expression = { p: 'path.to.property', o: '=', v: 'value' };
+
+Expressions with more than one predicate can be provided in an array of expressions.
+
+The SQLite3 provider supports: =, !=, <, <=, >, >=, in
+The indexeddb provider supports: =, <, <=, >, >=
+
 Why?
 ----
 

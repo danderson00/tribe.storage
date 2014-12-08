@@ -4,7 +4,7 @@
 module.exports = function (store, definition) {
     return {
         store: function (entity) {
-            return store.add(entity).then(function (result) {
+            return store.put(entity).then(function (result) {
                 if (definition.keyPath) {
                     if (result.constructor === Array)
                         for (var i = 0, l = result.length; i < l; i++)

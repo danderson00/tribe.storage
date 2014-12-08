@@ -1,24 +1,31 @@
 ﻿suite('tribe.storage.sqlite3.queries', function () {
     var queries = require('tribe.storage/sqlite3/queries');
 
-    test("store simple envelope with no indexes", function () {
+    test("store with no indexes or keyPath", function () {
         var envelope = { id: 1, topic: 'test' },
             query = queries.store({ name: 'messages', indexes: [] }, envelope);
-        expect(query.sql).to.equal("insert into messages (__content) values (?)");
+        expect(query.sql).to.equal("insert or replace into messages (__content) values (?)");
         expect(query.parameters).to.deep.equal([JSON.stringify(envelope)]);
     });
 
-    test("store envelope with indexes", function () {
+    test("store with indexes but no keyPath", function () {
         var envelope = { id: 1, topic: 'test', value1: 1, value2: 2 },
             query = queries.store({ name: 'messages', indexes: ['value1', 'value2'] }, envelope);
-        expect(query.sql).to.equal("insert into messages (__content,value1,value2) values (?,?,?)");
+        expect(query.sql).to.equal("insert or replace into messages (__content,value1,value2) values (?,?,?)");
         expect(query.parameters).to.deep.equal([JSON.stringify(envelope), 1, 2]);
     });
 
-    test("store includes keyPath when autoIncrement is not set", function () {
+    test("store with keyPath specified but not set", function () {
+        var envelope = { topic: 'test' },
+            query = queries.store({ name: 'messages', indexes: [], keyPath: 'id' }, envelope);
+        expect(query.sql).to.equal("insert or replace into messages (__content,id) values (?,?)");
+        expect(query.parameters).to.deep.equal([JSON.stringify(envelope), undefined]);
+    });
+
+    test("store with keyPath set", function () {
         var envelope = { id: 1, topic: 'test' },
             query = queries.store({ name: 'messages', indexes: [], keyPath: 'id' }, envelope);
-        expect(query.sql).to.equal("insert into messages (__content,id) values (?,?)");
+        expect(query.sql).to.equal("insert or replace into messages (__content,id) values (?,?)");
         expect(query.parameters).to.deep.equal([JSON.stringify(envelope), 1]);
     });
 
@@ -40,3 +47,10 @@
         expect(query.parameters).to.deep.equal([1, 10]);
     });
 });
+
+
+/*
+update messages set __content = ? where id = ?;insert or ignore into messages (__content,id) values (?,?)
+update messages set __content = ? where id = ?;insert or ignore into messages (__content,id) values (?,?)
+
+*/

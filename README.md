@@ -48,7 +48,7 @@ API
 
 	var storage = require('tribe.storage');
 
-### open
+### storage.open
 
 	storage.open(entities, options);
 
@@ -76,26 +76,24 @@ The open function initialises the storage provider. This must be done before any
 
 The open method returns a promise. The result of the promise will be a provider object 
 
-	storage.open().then(function (provider) {
-		
-	});
+	storage.open().then(function (provider) { });
 
-### provider
+### provider.entity
 
 	var entityContainer = provider.entity(name);
 
 The entity function directly returns an entityContainer object for the specified entity. The entity must be registered when calling open.
 
+### provider.close
+
 	provider.close();
 
 The close function closes any active database connections associated with the provider.
 
-### entityContainer
+### entityContainer.store
 
-	var container = provider.entity(name);
-
-	container.store({});
-	container.store([{}, {}, ...]);
+	entityContainer.store({});
+	entityContainer.store([{}, {}, ...]);
 
 The store method accepts a single object or array of objects and persists these objects to the object store.
 
@@ -103,7 +101,9 @@ If both a keyPath and autoIncrement have been specified, the stored object has t
 
 The store function returns a promise, the result of which is the updated object.
 
-	container.retrieve(expression);
+### entityContainer.retrieve
+
+	entityContainer.retrieve(expression);
 
 The retrieve function returns a promise, the result of which is an array of objects that match the specified expression (see below).
 

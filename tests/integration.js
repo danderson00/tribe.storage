@@ -106,7 +106,7 @@
                 });
         });
 
-        test("add operation returns entity with autoIncrement keyPath property set", function () {
+        test("store operation returns entity with autoIncrement keyPath property set", function () {
             return open([], [], 'id', true)
                 .then(function (container) {
                     return container.store({});
@@ -116,7 +116,7 @@
                 });
         });
 
-        test("multiple add operation returns entities with autoIncrement keyPath property set", function () {
+        test("multiple store operation returns entities with autoIncrement keyPath property set", function () {
             return open([], [], 'id', true)
                 .then(function (container) {
                     return container.store([{}, {}]);
@@ -139,6 +139,22 @@
                 .then(function (entities) {
                     expect(entities.length).to.equal(1);
                     expect(entities[0]).to.deep.equal({ id: 1 });
+                });
+        });
+
+        test("store operation replaces entities with matching keys", function () {
+            var entity;
+            return open([], [{ p1: 1, p2: 'test' }], 'p1')
+                .then(function (provider) {
+                    entity = provider;
+                    return entity.store({ p1: 1, p2: 'test2' });
+                })
+                .then(function () {
+                    return entity.retrieve({ p: 'p1', v: 1 });
+                })
+                .then(function (entities) {
+                    expect(entities.length).to.equal(1);
+                    expect(entities[0].p2).to.equal('test2');
                 });
         });
 

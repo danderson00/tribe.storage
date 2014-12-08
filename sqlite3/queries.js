@@ -6,13 +6,11 @@ module.exports = {
     store: function (entityData, entity) {
         var columns = _.flatten(entityData.indexes);
 
-        // if we've specified a keyPath and it's not an autoIncrement column, 
-        // we need to explicitly populate the column value so it can be queried
-        if (entityData.keyPath && !entityData.autoIncrement)
+        if (entityData.keyPath)
             columns.push(entityData.keyPath);
 
         return {
-            sql: "insert into " + entityData.name + " " + columnList() + " values " + paramList(columns.length + 2),
+            sql: "insert or replace into " + entityData.name + " " + columnList() + " values " + paramList(columns.length + 2),
             parameters: paramArray()
         };
 

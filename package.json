@@ -1,6 +1,6 @@
 {
   "name": "tribe.storage",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Efficient, portable, extensible object storage.",
   "main": "index.js",
   "dependencies": {

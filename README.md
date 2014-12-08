@@ -97,6 +97,8 @@ The close function closes any active database connections associated with the pr
 
 The store method accepts a single object or array of objects and persists these objects to the object store.
 
+If a keyPath has been specified, and an entity's key value matches an existing entity in the store, the existing entity will be updated.
+
 If both a keyPath and autoIncrement have been specified, the stored object has the keyPath property set to the latest autoIncrement value.
 
 The store function returns a promise, the result of which is the updated object.
@@ -110,7 +112,7 @@ The retrieve function returns a promise, the result of which is an array of obje
 Expressions
 -----------
 
-Expressions are simple objects containing a target property, an operation and a value.
+Expressions are simple objects containing a target property, an operation and a value. Operation can be omitted - the default is to test equality.
 
 	var expression = { p: 'path.to.property', o: '=', v: 'value' };
 

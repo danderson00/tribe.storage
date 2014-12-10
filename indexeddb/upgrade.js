@@ -26,6 +26,9 @@
         }
 
         function createIndex(store, entity, index) {
+            if(index.constructor === Array && index.length === 1)
+                index = index[0];
+
             var name = indexName(index);
 
             if (!store.indexNames.contains(name)) {

@@ -16,6 +16,9 @@ module.exports = function (store, definition) {
             });
         },
         retrieve: function (expression) {
+            if (expression.constructor === Array && expression.length === 1)
+                expression = expression[0];
+
             return store.index(indexes.indexName(expression), indexes.convertExpression(expression));
         }
     };

@@ -158,6 +158,40 @@
                 });
         });
 
+        test("single property indexes can be specified and requested as arrays or individually", function () {
+            var container;
+
+            return open(['p1', ['p2']], [
+                    { p1: 1, p2: 1 },
+                    { p1: 2, p2: 2 }
+                ])
+                .then(function (result) {
+                    container = result;
+                    return container.retrieve({ p: 'p1', v: 2 });
+                })
+                .then(function (results) {
+                    expect(results.length).to.equal(1);
+                })
+                .then(function (result) {
+                    return container.retrieve([{ p: 'p1', v: 2 }]);
+                })
+                .then(function (results) {
+                    expect(results.length).to.equal(1);
+                })
+                .then(function (result) {
+                    return container.retrieve({ p: 'p2', v: 2 });
+                })
+                .then(function (results) {
+                    expect(results.length).to.equal(1);
+                })
+                .then(function (result) {
+                    return container.retrieve([{ p: 'p2', v: 2 }]);
+                })
+                .then(function (results) {
+                    expect(results.length).to.equal(1);
+                });
+        });
+
         function open(indexes, entities, keyPath, autoIncrement) {
             var entity;
 

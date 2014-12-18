@@ -1,21 +1,19 @@
 ﻿module.exports = {
     indexName: function (expression) {
         if (expression.constructor === Array) {
-            var sorted = sortByName(expression),
-                paths = [];
-            for (var i = 0, l = sorted.length; i < l; i++)
-                paths.push(sorted[i].p);
+            var paths = [];
+            for (var i = 0, l = expression.length; i < l; i++)
+                paths.push(expression[i].p);
             return paths.join('_');
         }
         return expression.p;
     },
     convertExpression: function (expression) {
         if (expression.constructor === Array) {
-            var sorted = sortByName(expression),
-                upperBounds = [],
+            var upperBounds = [],
                 lowerBounds = [];
-            for (var i = 0, l = sorted.length; i < l; i++) {
-                var bounds = convertExpression(sorted[i]);
+            for (var i = 0, l = expression.length; i < l; i++) {
+                var bounds = convertExpression(expression[i]);
                 lowerBounds.push(bounds.lower);
                 upperBounds.push(bounds.upper);
             }

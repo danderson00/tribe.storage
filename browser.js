@@ -1,6 +1,7 @@
 ﻿var open = require('./open'),
     stores = {
-        indexeddb: require('./indexeddb')
+        indexeddb: require('./indexeddb'),
+        memory: require('./memory')
     };
 
 module.exports = {

@@ -1,6 +1,7 @@
 ﻿var open = require('./open'),
     stores = {
-        sqlite3: require('./sqlite3')
+        sqlite3: require('./sqlite3'),
+        memory: require('./memory')
     };
 
 module.exports = {

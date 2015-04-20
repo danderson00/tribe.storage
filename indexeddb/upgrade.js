@@ -44,6 +44,6 @@
 
 function indexName(index) {
     if (index.constructor === Array)
-        return index.sort().join('_');
+        return index.join('_');
     return index;
 }

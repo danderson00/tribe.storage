@@ -29,42 +29,49 @@ module.exports = function (entity, database) {
     }
 
     function createIndexes() {
-        return Q.all(_.map(indexes, function (index) { 
-            if (!indexExists(index)) {
-                return Q.all(createIndexColumns()).then(createIndex);
-            }
+        return _.reduce(indexes, function (promise, index) {
+            return promise.then(createIndex(index));
+        }, Q());
 
-            function createIndexColumns() {
-                if (index.constructor === Array)
-                    return _.map(index, createIndexColumn);
-                return [createIndexColumn(index)];
-            }
-
-            function createIndexColumn(path) {
-                if (!columnExists(path)) {
-                    existingColumns.push(indexName(path));
-                    return database.run("alter table " + entity.name + " add column " + indexName(path) + " text");
+        function createIndex (index) {
+            return function () {
+                if (!indexExists(index)) {
+                    return Q.all(createIndexColumns()).then(createIndex);
                 }
-            }
 
-            function createIndex() {
-                return database.run("create index " + indexName(index) + " on " + entity.name + " (" + indexColumns(index) + ")");
-            }
+                function createIndexColumns() {
+                    if (index.constructor === Array) {
+                        return _.map(index, createIndexColumn);
+                    }
+                    return [createIndexColumn(index)];
+                }
 
-            function indexColumns() {
-                if (index.constructor === Array)
-                    return _.map(index, indexName).join(',');
-                return indexName(index);
-            }
+                function createIndexColumn(path) {
+                    if (!columnExists(path)) {
+                        existingColumns.push(indexName(path));
+                        return database.run("alter table " + entity.name + " add column " + indexName(path) + " text");
+                    }
+                }
 
-            function indexExists() {
-                return existingIndexes.indexOf(indexName(index)) > -1;
-            }
+                function createIndex() {
+                    return database.run("create index " + indexName(index) + " on " + entity.name + " (" + indexColumns(index) + ")");
+                }
 
-            function columnExists(path) {
-                return existingColumns.indexOf(indexName(path)) > -1;
-            }
-        }));
+                function indexColumns() {
+                    if (index.constructor === Array)
+                        return _.map(index, indexName).join(',');
+                    return indexName(index);
+                }
+
+                function indexExists() {
+                    return existingIndexes.indexOf(indexName(index)) > -1;
+                }
+
+                function columnExists(path) {
+                    return existingColumns.indexOf(indexName(path)) > -1;
+                }
+            };
+        }
     }
 
     function indexName(index) {

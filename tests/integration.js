@@ -197,31 +197,31 @@
         test("retrieve sorts by index properties", function () {
             var container;
 
-            return open([['p1', 'p2'], ['p2', 'p1']], [
-                    { p1: 4, p2: 1 },
-                    { p1: 3, p2: 2 },
-                    { p1: 1, p2: 1 },
-                    { p1: 2, p2: 2 }
+            return open([['p1', 'p2.value'], ['p2.value', 'p1']], [
+                    { p1: 4, p2: { value: 1 } },
+                    { p1: 3, p2: { value: 2 } },
+                    { p1: 1, p2: { value: 1 } },
+                    { p1: 2, p2: { value: 2 } }
                 ])
                 .then(function (result) {
                     container = result;
-                    return container.retrieve([{ p: 'p1', o: '>', v: 0 }, { p: 'p2', o: '>', v: 0 }]);
+                    return container.retrieve([{ p: 'p1', o: '>', v: 0 }, { p: 'p2.value', o: '>', v: 0 }]);
                 })
                 .then(function (results) {
                     expect(results).to.deep.equal([
-                        { p1: 1, p2: 1 },
-                        { p1: 2, p2: 2 },
-                        { p1: 3, p2: 2 },
-                        { p1: 4, p2: 1 }
+                        { p1: 1, p2: { value: 1 } },
+                        { p1: 2, p2: { value: 2 } },
+                        { p1: 3, p2: { value: 2 } },
+                        { p1: 4, p2: { value: 1 } }
                     ]);
-                    return container.retrieve([{ p: 'p2', o: '>', v: 0 }, { p: 'p1', o: '>', v: 0 }]);
+                    return container.retrieve([{ p: 'p2.value', o: '>', v: 0 }, { p: 'p1', o: '>', v: 0 }]);
                 })
                 .then(function (results) {
                     expect(results).to.deep.equal([
-                        { p1: 1, p2: 1 },
-                        { p1: 4, p2: 1 },
-                        { p1: 2, p2: 2 },
-                        { p1: 3, p2: 2 }
+                        { p1: 1, p2: { value: 1 } },
+                        { p1: 4, p2: { value: 1 } },
+                        { p1: 2, p2: { value: 2 } },
+                        { p1: 3, p2: { value: 2 } }
                     ]);
                 });
         });

@@ -21,7 +21,7 @@ module.exports = function (entityData) {
             for(var id in entities)
                 if(entities.hasOwnProperty(id) && evaluate(expression, entities[id]))
                     results.push(entities[id]);
-            return promises.resolved(results);
+            return promises.resolved(sort(expression, results));
         }
     }
 
@@ -35,5 +35,30 @@ module.exports = function (entityData) {
 
         entities[id] = entity;
         return entity;
+    }
+
+    function sort(expression, results) {
+        return results.sort(function (a, b) {
+            if(expression.constructor === Array) {
+                for(var i = 0, l = expression.length; i < l; i++) {
+                    var result = compare(expression[i], a, b);
+                    if(result !== 0)
+                        return result;
+                }
+                return 0;
+            } else {
+                return compare(expression, a, b);
+            }
+        });
+
+        function compare(expression, a, b) {
+            var aValue = keyPath(expression.p, a),
+                bValue = keyPath(expression.p, b);
+            if(aValue < bValue)
+                return -1;
+            if(aValue > bValue)
+                return 1;
+            return 0;
+        }
     }
 };

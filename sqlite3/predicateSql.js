@@ -18,11 +18,11 @@ module.exports = {
 
             if (predicates.constructor === Array) {
                 if (predicates.length > 0)
-                    return ' WHERE ' + _.map(predicates, toSql).join(' AND ');
+                    return ' WHERE ' + _.map(predicates, toSql).join(' AND ') + orderBy();
                 else
                     return '';
             } else
-                  return ' WHERE ' + toSql(predicates);
+                  return ' WHERE ' + toSql(predicates) + orderBy();
         }
 
         function parameters() {
@@ -30,12 +30,18 @@ module.exports = {
                 return _.flatten(_.pluck(predicates, 'v'));
             return _.flatten([predicates.v]);
         }
+
+        function orderBy() {
+            if (predicates.constructor === Array)
+                return ' ORDER BY ' + _.map(predicates, columnName).join(',');
+            return ' ORDER BY ' + columnName(predicates);
+        }
     }
 }
 
 function toSql(predicate) {
     predicate.o = predicate.o || '=';
-    return predicate.p.replace(/\./g, '_') + ' ' + sqlOperator(predicate) + ' ' + parameterList(predicate.v);
+    return columnName(predicate) + ' ' + sqlOperator(predicate) + ' ' + parameterList(predicate.v);
 }
 
 function sqlOperator(predicate) {
@@ -50,4 +56,8 @@ function parameterList(value) {
     if (value && value.constructor === Array)
         return '(' + new Array(value.length + 1).join(',?').substring(1) + ')';
     return '?';
+}
+
+function columnName(predicate) {
+    return predicate.p.replace(/\./g, '_');
 }

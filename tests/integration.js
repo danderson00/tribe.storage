@@ -226,6 +226,22 @@
                 });
         });
 
+        test("clear deletes all entities", function () {
+            var container;
+
+            return open(['p1'], [{ p1: 1, p2: 1 }])
+                .then(function (result) {
+                    container = result;
+                    container.clear();
+                })
+                .then(function () {
+                    return container.retrieve({ p: 'p1', v: 1 });
+                })
+                .then(function (messages) {
+                    expect(messages.length).to.equal(0);
+                });
+        });
+
         function open(indexes, entities, keyPath, autoIncrement) {
             var entity;
 

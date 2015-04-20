@@ -20,6 +20,9 @@ module.exports = function (store, definition) {
                 expression = expression[0];
 
             return store.index(indexes.indexName(expression), indexes.convertExpression(expression));
+        },
+        clear: function () {
+            return store.clear();
         }
     };
 };

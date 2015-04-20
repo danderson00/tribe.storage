@@ -29,6 +29,9 @@ module.exports = function (entityData, database) {
                     return result;
                 });
             });
+        },
+        clear: function () {
+            return database.run(queries.clear(entityData.name));
         }
     };
 }

@@ -36,6 +36,12 @@ module.exports = {
         var query = predicateSql.toSql(predicates);
         query.sql = "SELECT * FROM " + entity + query.sql;
         return query;
+    },
+    clear: function (entity) {
+        return {
+            sql: "DELETE FROM " + entity,
+            parameters: []
+        }
     }
 };
 

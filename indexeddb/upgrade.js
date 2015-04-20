@@ -34,8 +34,11 @@
             if (!store.indexNames.contains(name)) {
                 store.createIndex(name, index, { unique: false });
                 if(entity.keyPath) {
-                    var indexWithKeyPath = Array.prototype.concat.call([entity.keyPath], index);
-                    store.createIndex(indexName(indexWithKeyPath), indexWithKeyPath, { unique: false });
+                    var indexWithKeyPath = Array.prototype.concat.call([entity.keyPath], index),
+                        indexNameWithKeyPath = indexName(indexWithKeyPath);
+                    if (!store.indexNames.contains(indexNameWithKeyPath)) {
+                        store.createIndex(indexNameWithKeyPath, indexWithKeyPath, { unique: false });
+                    }
                 }
             }
         }

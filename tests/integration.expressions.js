@@ -11,13 +11,13 @@
 
         test("greaterThan", function () {
             return retrieve({ p: 'p1', o: '>', v: 2 }, [3, 4]);
-            return retrieve([{ p: 'p1', o: '>', v: 1 }, { p: 'p2', o: '>', v: 2 }, { p: 'p3', o: '=', v: 'test' }], [3, 4]);
+            return retrieve([{ p: 'p1', o: '>', v: 1 }, { p: 'p2', o: '>', v: 2 }, { p: 'p3', o: '=', v: 'test' }], [4]);
             return retrieve([{ p: 'p1', o: '>', v: 1 }, { p: 'p2', o: '>', v: 4 }, { p: 'p3', o: '=', v: 'test' }], []);
         });
 
         test("greaterThanEqualTo", function () {
             return retrieve({ p: 'p1', o: '>=', v: 2 }, [2, 3, 4]);
-            return retrieve([{ p: 'p1', o: '>=', v: 2 }, { p: 'p2', o: '>=', v: 1 }, { p: 'p3', o: '=', v: 'test' }], [2, 3, 4]);
+            return retrieve([{ p: 'p1', o: '>=', v: 2 }, { p: 'p2', o: '>=', v: 1 }, { p: 'p3', o: '=', v: 'test' }], [2, 4]);
             return retrieve([{ p: 'p1', o: '>=', v: 1 }, { p: 'p2', o: '>=', v: 4 }, { p: 'p3', o: '=', v: 'test' }], [4]);
         });
 
@@ -29,7 +29,7 @@
 
         test("lessThanEqualTo", function () {
             return retrieve({ p: 'p1', o: '<=', v: 3 }, [1, 2, 3]);
-            return retrieve([{ p: 'p1', o: '<=', v: 4 }, { p: 'p2', o: '<=', v: 3 }, { p: 'p3', o: '=', v: 'test' }], [1, 2, 3]);
+            return retrieve([{ p: 'p1', o: '<=', v: 4 }, { p: 'p2', o: '<=', v: 3 }, { p: 'p3', o: '=', v: 'test' }], [1, 2]);
             return retrieve([{ p: 'p1', o: '<=', v: 4 }, { p: 'p2', o: '<=', v: 1 }, { p: 'p3', o: '=', v: 'test' }], [1]);
         });
 
@@ -43,7 +43,7 @@
                     return entity.store([
                         { p1: 1, p2: 1, p3: 'test' },
                         { p1: 2, p2: 2, p3: 'test' },
-                        { p1: 3, p2: 3, p3: 'test' },
+                        { p1: 3, p2: 3, p3: 'test2' },
                         { p1: 4, p2: 4, p3: 'test' },
                     ]);
                 })

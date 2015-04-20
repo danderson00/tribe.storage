@@ -22,6 +22,10 @@ module.exports = function (entityData) {
                 if(entities.hasOwnProperty(id) && evaluate(expression, entities[id]))
                     results.push(entities[id]);
             return promises.resolved(sort(expression, results));
+        },
+        clear: function () {
+            entities = {};
+            return promises.resolved();
         }
     }
 

@@ -17,10 +17,16 @@ var api = module.exports = {
             .then(metadata)
             .then(function (oldData) {
                 if(!oldData || entitiesHaveChanged(oldData.entities, entities)) {
-                    var version = (oldData ? oldData.version : 0) + 1;
-                    return metadata(version, entities)
-                        .then(function (data) {
-                            return open(data.name, data.version, upgrade(data.entities, oldData && oldData.entities));
+                    var version = (oldData ? oldData.version : 0) + 1,
+                        provider;
+
+                    return open('__entities', version, upgrade(entities, oldData && oldData.entities))
+                        .then(function (newProvider) {
+                            provider = newProvider;
+                            return metadata(version, entities);
+                        })
+                        .then(function () {
+                            return provider;
                         });
                 } else {
                     return open(oldData.name, oldData.version);

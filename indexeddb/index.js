@@ -4,7 +4,9 @@
     upgrade = require('./upgrade'),
     entityContainer = require('./entityContainer'),
     Q = require('q'),
-        
+
+    entitiesHaveChanged = require('tribe.storage/utilities/metadata').entitiesHaveChanged,
+
     db;
 
 var api = module.exports = {
@@ -14,11 +16,15 @@ var api = module.exports = {
         return Q.when(resetIfRequired())
             .then(metadata)
             .then(function (oldData) {
-                var version = (oldData ? oldData.version : 0) + 1;
-                return metadata(version, entities)
-                    .then(function (data) {
-                        return open(data.name, data.version, upgrade(data.entities, oldData && oldData.entities));
-                    });
+                if(!oldData || entitiesHaveChanged(oldData.entities, entities)) {
+                    var version = (oldData ? oldData.version : 0) + 1;
+                    return metadata(version, entities)
+                        .then(function (data) {
+                            return open(data.name, data.version, upgrade(data.entities, oldData && oldData.entities));
+                        });
+                } else {
+                    return open(oldData.name, oldData.version);
+                }
             })
             .then(function (database) {
                 db = database;

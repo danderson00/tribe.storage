@@ -3,9 +3,8 @@
     metadata = require('./metadata'),
     upgrade = require('./upgrade'),
     entityContainer = require('./entityContainer'),
-    Q = require('q'),
-
     entitiesHaveChanged = require('tribe.storage/utilities/metadata').entitiesHaveChanged,
+    Q = require('q'),
 
     db;
 
